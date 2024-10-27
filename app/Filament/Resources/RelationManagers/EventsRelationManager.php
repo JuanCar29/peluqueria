@@ -33,16 +33,11 @@ class EventsRelationManager extends RelationManager
                 Forms\Components\DateTimePicker::make('star')
                     ->required()
                     ->seconds(false)
-                    ->native(false)
-                    ->reactive()
-                    ->minutesStep(15)
                     ->default(Now()),
                 Forms\Components\DateTimePicker::make('end')
                     ->required()
                     ->seconds(false)
-                    ->native(false)
-                    ->minutesStep(15)
-                    ->minDate('star')
+                    ->after('star')
                     ->default(Now()),
                 Textarea::make('observaciones')
                     ->autosize()
@@ -71,6 +66,9 @@ class EventsRelationManager extends RelationManager
                     ->money('eur')
                     ->alignEnd(),
                 TextColumn::make('extras')
+                    ->money('eur')
+                    ->alignEnd(),
+                TextColumn::make('total')
                     ->money('eur')
                     ->alignEnd(),
             ])
