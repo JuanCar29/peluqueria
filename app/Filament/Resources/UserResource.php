@@ -10,6 +10,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -39,6 +40,7 @@ class UserResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('phone')
                     ->tel()
+                    ->mask('999 999 999')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('nivel')
                     ->required()
@@ -59,6 +61,7 @@ class UserResource extends Resource
                     ->dateTime()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('phone')
+                    ->alignCenter()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('nivel')
                     ->numeric()

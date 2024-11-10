@@ -2,7 +2,10 @@
 
 namespace App\Filament\Resources\EventResource\RelationManagers;
 
+use App\Models\Event;
+use Carbon\Carbon;
 use Filament\Forms;
+use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -30,11 +33,11 @@ class EventsRelationManager extends RelationManager
                     ->required()
                     ->label('Tratamiento')
                     ->relationship('product', 'name'),
-                Forms\Components\DateTimePicker::make('star')
+                DateTimePicker::make('star')
                     ->required()
                     ->seconds(false)
                     ->default(Now()),
-                Forms\Components\DateTimePicker::make('end')
+                DateTimePicker::make('end')
                     ->required()
                     ->seconds(false)
                     ->after('star')
@@ -55,11 +58,23 @@ class EventsRelationManager extends RelationManager
     {
         return $table
             ->recordTitleAttribute('name')
+            ->defaultSort('star', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('star')
-                    ->dateTime('j.n.Y H:i'),
-                Tables\Columns\TextColumn::make('end')
-                    ->dateTime('j.n.Y H:i'),
+                    ->label('Día')
+                    ->alignCenter()
+                    ->dateTime('j.n.Y'),
+                Tables\Columns\TextColumn::make('hora')
+                    ->alignCenter()
+                    ->state(function (Event $record): string {
+                        return Carbon::parse($record->star)->format('H:i') . '  ' . Carbon::parse($record->end)->format('H:i');
+                    }),
+                TextColumn::make('tiempo')
+                    ->alignCenter()
+                    ->suffix(' ´')
+                    ->state(function (Event $record): float {
+                        return Carbon::parse($record->star)->floatDiffInMinutes(Carbon::parse($record->end));
+                    }),
                 TextColumn::make('product.name')
                     ->label('Tratamiento'),
                 TextColumn::make('precio')
